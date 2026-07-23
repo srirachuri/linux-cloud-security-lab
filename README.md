@@ -67,6 +67,7 @@ After completing these 30 days, I gained practical experience in:
 
 ---
 
-**Author:** Sri
+**Author:** Sri Gayathri
+
 **Learning Goal:** Build a strong Linux foundation for a career in Cloud Security.
 
