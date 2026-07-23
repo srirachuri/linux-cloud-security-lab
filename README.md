@@ -1,8 +1,7 @@
 # 🐧 30 Days – Linux Practice 
-
 ## 📖 Overview
 
-This repository contains my **30-day Linux practice journey**, covering Linux fundamentals, file management, permissions, networking, shell utilities, system administration, backups, and cloud security concepts through hands-on labs and mini-projects.
+This repository contains my **30-day Linux practice journey**, covering Linux fundamentals, file management, permissions, networking, shell utilities, system administration, backups, and cloud security concepts, all through hands-on labs and mini-projects.
 
 The goal of this repository is to build a strong Linux foundation for **Cloud Support, SOC Analyst, DevOps, and Cloud Security** roles.
 
@@ -53,7 +52,7 @@ The goal of this repository is to build a strong Linux foundation for **Cloud Su
 
 ## 🎯 Purpose
 
-This repository demonstrates consistent hands-on Linux practice and serves as a learning portfolio for entry-level Cloud, Linux, DevOps, and Cybersecurity roles.
+This repository demonstrates consistent hands-on Linux experience and serves as a learning portfolio for entry-level roles in Cloud, Linux, DevOps, and Cybersecurity.
 
 ## 🚀 Learning Outcome
 
@@ -68,6 +67,6 @@ After completing these 30 days, I gained practical experience in:
 
 ---
 
-**Author:** Sri Gayathri
+**Author:** Sri
 **Learning Goal:** Build a strong Linux foundation for a career in Cloud Security.
 
