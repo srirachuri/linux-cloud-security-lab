@@ -1,4 +1,4 @@
-# 🐧 Linux Practice – 30 Days
+# 🐧 30 Days – Linux Practice 
 
 ## 📖 Overview
 
