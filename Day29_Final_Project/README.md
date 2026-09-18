@@ -6,7 +6,7 @@ This final project simulates a real-world **Cloud Support / Linux Administration
 
 ### Scenario
 
-A cloud server is running, but something needs to be checked and corrected.
+A cloud server is running, but something needs checking and fixing.
 
 The tasks were:
 
@@ -59,7 +59,7 @@ The tasks were:
 
 # Part 1 — SSH into the EC2 Instance
 
-The EC2 instance was accessed securely from Windows PowerShell using an SSH private key.
+I accessed the EC2 instance securely from Windows PowerShell using an SSH private key.
 Part 2 — Check System Logs
 
 The system logs were reviewed using:
