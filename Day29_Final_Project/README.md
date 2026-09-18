@@ -1,236 +1,278 @@
-# 🌟 Day 29 — Final Project  
-AWS EC2 Linux Server Administration & Support Lab
-Project Overview
-This project demonstrates deploying and administering an Ubuntu Linux server on AWS EC2 using the AWS Free Tier.
+# Day 29 Final Project — AWS EC2 Linux Server Administration & Support
 
-The goal of this lab was to gain practical experience with Linux system administration, remote server access, system services, logs, permissions, package management, web server configuration, and basic troubleshooting.
+## Project Overview
 
-This project was completed as hands-on preparation for Linux Support, Technical Support, Cloud Support, and Junior Linux Administration roles.
+This final project simulates a real-world **Cloud Support / Linux Administration** task on an AWS EC2 Linux server.
 
-Environment
-Cloud Platform: AWS
-Service: Amazon EC2
-Operating System: Ubuntu 24.04 LTS
-Instance Type: AWS EC2
-Architecture: x86_64
-Remote Access: SSH
-Web Server: Nginx
-Package Manager: APT
-Service Manager: systemd
-Shell: Bash
-Objectives
-The main objectives of this project were to:
+### Scenario
 
-Deploy a Linux server using AWS EC2
-Connect to the server securely using SSH
-Perform basic Linux system administration
-Manage files, directories, users, permissions, and ownership
-Install and manage software packages
-Monitor system services
-Work with Linux system and authentication logs
-Install and configure Nginx
-Verify and troubleshoot Linux services
-Practice basic Linux support and troubleshooting workflows
-Tasks Performed
-1. AWS EC2 Linux Server Deployment
-Created an Ubuntu Linux EC2 instance using AWS.
+A cloud server is running, but something needs to be checked and corrected.
 
-The instance was configured for hands-on Linux administration and cloud infrastructure practice.
+The tasks were:
 
-2. SSH Remote Access
-Connected to the Ubuntu EC2 instance remotely from Windows PowerShell using SSH.
+1. SSH into the EC2 instance
+2. Check system logs using `journalctl`
+3. Review authentication logs
+4. Identify and correct unsafe file permissions
+5. Verify file ownership
+6. Update the APT package repository
+7. Install a required package
+8. Verify that the installed service is running
+9. Check currently running system services
+10. Confirm successful completion
+11. Stop the EC2 instance after completing the lab
 
-Example:
+---
 
-ssh -i "linux-key.pem" ubuntu@<EC2-PUBLIC-IP>
-This provided hands-on experience with:
+## Objectives
 
-SSH
-SSH key authentication
-Remote Linux administration
-Linux command-line access
-Security Note: Private SSH keys and sensitive AWS credentials were never uploaded to GitHub.
+- Practice secure SSH access to an AWS EC2 Linux server
+- Understand Linux system logs
+- Use `journalctl` for troubleshooting
+- Review authentication activity
+- Understand Linux file permissions
+- Correct unsafe permissions using `chmod`
+- Correct file ownership using `chown`
+- Manage packages using APT
+- Install and verify Nginx
+- Check Linux services using `systemctl`
+- Perform basic cloud server troubleshooting
+- Practice documenting a real-world support workflow
 
-3. Linux System Administration
-Performed basic Linux administration tasks including:
+---
 
-whoami
-pwd
-ls -l
-mkdir
-These commands were used to verify the current user, working directory, files, directories, and permissions.
+## Environment
 
-4. File Permissions and Ownership
-Practised Linux permission management using:
+| Component | Details |
+|---|---|
+| Cloud Platform | AWS |
+| Service | Amazon EC2 |
+| Operating System | Ubuntu 24.04.3 LTS |
+| Architecture | x86_64 |
+| Instance Type | t3.micro |
+| Access Method | SSH |
+| Package Manager | APT |
+| Web Server Installed | Nginx |
+| Service Manager | systemd |
 
-chmod
-chown
-ls -ld
-Example workflow:
+---
 
-mkdir test_app
-chmod 777 test_app
-ls -ld test_app
+# Part 1 — SSH into the EC2 Instance
 
-chmod 755 test_app
-sudo chown ubuntu:ubuntu test_app
-ls -ld test_app
-This demonstrated practical understanding of:
+The EC2 instance was accessed securely from Windows PowerShell using an SSH private key.
+Part 2 — Check System Logs
 
-Linux permissions
-Read/write/execute permissions
-File ownership
-User and group ownership
-5. Package Management
-Updated the Ubuntu package repositories using:
-
-sudo apt update
-Installed Nginx using:
-
-sudo apt install nginx -y
-This provided hands-on experience with the Ubuntu APT package management system.
-
-6. Nginx Web Server Installation
-Installed and configured the Nginx web server on the EC2 Ubuntu instance.
-
-Verified the service using:
-
-sudo systemctl status nginx
-The service was successfully shown as:
-
-Active: active (running)
-This demonstrated experience with:
-
-Software installation
-Nginx
-systemd
-Service status verification
-Linux web-server administration
-7. Linux Service Management
-Used systemd to inspect running services:
-
-systemctl list-units --type=service --state=running
-This provided practical experience identifying active Linux services such as:
-
-nginx
-ssh
-cron
-systemd-journald
-systemd-networkd
-systemd-resolved
-unattended-upgrades
-8. Linux Log Analysis
-Inspected system logs using:
+The system logs were reviewed using:
 
 sudo journalctl -xe
-Also examined authentication logs:
+
+This command displays recent systemd journal messages and provides information useful for troubleshooting services, startup events, sessions, and system activity.
+
+The logs showed successful system startup and service activity.
+
+Examples of information observed included:
+
+system startup
+user session creation
+systemd services
+SSH activity
+authentication activity
+APT-related activity
+Part 3 — Review Authentication Logs
+
+The authentication log was inspected using:
 
 sudo cat /var/log/auth.log
-Used log information to understand:
 
-SSH connections
+The log contained authentication and security-related events.
+
+Examples included:
+
+User creation
+User group membership
+SSH server activity
+Successful public-key authentication
 User sessions
-Authentication activity
 sudo activity
-System services
-System startup/shutdown events
-This is particularly relevant to Linux Support and Technical Support roles.
+Cron activity
 
-Troubleshooting Skills Practised
-During the project, I practised the basic troubleshooting workflow used when investigating Linux server problems:
+Additional filtering commands were also used:
 
-Identify the problem
-        ↓
-Check system/service status
-        ↓
-Review logs
-        ↓
-Check configuration
-        ↓
-Apply corrective action
-        ↓
-Verify the result
-Examples of tools and commands used:
+sudo grep Accepted /var/log/auth.log
 
-systemctl
-journalctl
-cat
-grep
-ls -l
-chmod
-chown
-apt
-ssh
-Skills Demonstrated
-Linux
-Ubuntu Linux
-Bash command line
-File and directory management
-Users and groups
-File permissions
-File ownership
-Package management
-Process/service management
-systemd
-Linux logs
+and:
+
+sudo grep Failed /var/log/auth.log
+
+These commands help administrators quickly investigate successful and failed authentication attempts.
+
+Part 4 — Check and Fix File Permissions
+
+A test application directory was created:
+
+mkdir test_app
+
+The permissions were intentionally changed to an unsafe configuration:
+
+chmod 777 test_app
+
+The permissions were then checked:
+
+ls -ld test_app
+
+The output showed:
+
+drwxrwxrwx
+
+This means the owner, group, and other users had read, write, and execute permissions.
+
+For a typical application directory, allowing write access to everyone can create unnecessary security risk.
+
+Part 5 — Correct the Permissions
+
+The directory permissions were changed to:
+
+chmod 755 test_app
+
+The permissions were verified:
+
+ls -ld test_app
+
+The resulting permissions were:
+
+drwxr-xr-x
+
+This provides:
+
+Owner: read, write, execute
+Group: read, execute
+Others: read, execute
+
+The permissions were therefore more restrictive than the original 777 configuration.
+
+Part 6 — Verify File Ownership
+
+The ownership of the directory was also checked and corrected using:
+
+sudo chown ubuntu:ubuntu test_app
+
+Then:
+
+ls -ld test_app
+
+The final ownership showed:
+
+ubuntu ubuntu
+
+This confirms that the directory belongs to the intended ubuntu user and group.
+
+Part 7 — Update the Package Repository
+
+Before installing the required package, the APT package information was updated:
+
+sudo apt update
+
+The command successfully contacted the Ubuntu package repositories and downloaded updated package metadata.
+
+The system reported that packages could be upgraded.
+
+Part 8 — Install Nginx
+
+Nginx was installed using:
+
+sudo apt install nginx -y
+
+The installation completed successfully.
+
+The installed Nginx package was:
+
+nginx 1.24.0-2ubuntu7.5
+
+The installation also created and configured the Nginx systemd service.
+
+Part 9 — Verify Nginx Service
+
+The Nginx service was checked using:
+
+sudo systemctl status nginx
+
+The output confirmed:
+
+Active: active (running)
+
+This verifies that Nginx was successfully installed and running.
+
+Part 10 — Check Running Services
+
+The currently running system services were reviewed using:
+
+systemctl list-units --type=service --state=running
+
+The output showed multiple active services, including:
+
+nginx.service
+ssh.service
+systemd-journald.service
+systemd-networkd.service
+systemd-resolved.service
+rsyslog.service
+cron.service
+snap.amazon-ssm-agent.amazon-ssm-agent.service
+
+This helped verify the operational state of the server.
+
+Part 11 — Verify Project Completion
+
+A completion message was created:
+
+echo "Day 29 Final Project completed successfully" > day29_success.txt
+
+The file was verified using:
+
+cat day29_success.txt
+
+Output:
+
+Day 29 Final Project completed successfully
+
+This confirmed that all planned tasks were completed.
+
+Part 12 — Stop the EC2 Instance
+
+After completing the lab, the EC2 instance was stopped from the AWS EC2 console.
+
+The final AWS console screenshot shows:
+
+Instance state: Stopped
+
+Stopping the instance after completing the lab helps avoid unnecessary compute usage.
+
+Troubleshooting Skills Practiced
+
+This project provided practical experience with:
+
 SSH
-Basic troubleshooting
-AWS
-Amazon EC2
-Linux cloud server deployment
-EC2 networking fundamentals
-Remote server administration
-Web Server
-Nginx installation
-Nginx service management
-systemd service verification
-Support Skills
-Troubleshooting methodology
-Log analysis
-Service verification
-Permission troubleshooting
-Remote server administration
-Project Evidence
-Screenshots demonstrating the project are stored in the Screenshots/ directory.
+ssh -i "linux-key.pem" ubuntu@<EC2-PUBLIC-IP>
+System Logs
+sudo journalctl -xe
+Authentication Logs
+sudo cat /var/log/auth.log
+Log Filtering
+sudo grep Accepted /var/log/auth.log
+sudo grep Failed /var/log/auth.log
+File Permissions
+ls -ld test_app
+chmod 777 test_app
+chmod 755 test_app
+File Ownership
+sudo chown ubuntu:ubuntu test_app
+Package Management
+sudo apt update
+sudo apt install nginx -y
+Service Management
+sudo systemctl status nginx
+Running Services
+systemctl list-units --type=service --state=running
 
-The screenshots include evidence of:
-
-SSH connection to the Ubuntu EC2 instance
-Linux system information
-journalctl log analysis
-Authentication log analysis
-File permissions and ownership
-APT package management
-Nginx installation
-Nginx service verification
-Running Linux services
-AWS EC2 instance configuration
-What I Learned
-Through this project, I gained practical experience administering a Linux server running in a cloud environment.
-
-The project helped me understand how Linux administration and cloud infrastructure work together and gave me hands-on practice with the types of tasks commonly encountered in entry-level Linux and cloud support environments.
-
-Career Relevance
-This project was created to build practical skills for entry-level roles such as:
-
-Linux Support Trainee
-Linux Support Intern
-Junior Linux Support Engineer
-Linux Technical Support Engineer
-Linux Operations Trainee
-Junior System Administrator
-Cloud Support Associate
-It also provides a foundation for progressing toward Cloud Support and Cloud Security roles.
-
-Technologies Used
-AWS EC2
-Ubuntu 24.04 LTS
-Linux
-Bash
-SSH
-systemd
-Nginx
-APT
-Git/GitHub
-Project Status
-Completed — Initial Linux EC2 Administration Lab
+```bash
+ssh -i "linux-key.pem" ubuntu@<EC2-PUBLIC-IP>
