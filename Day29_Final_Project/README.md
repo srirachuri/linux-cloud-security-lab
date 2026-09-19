@@ -2,9 +2,9 @@
 
 ## Project Overview
 
-This project demonstrates deploying, configuring, administering, monitoring, troubleshooting, and securing a Linux server running on **AWS EC2**.
+This project demonstrates how to deploy, configure, administer, monitor, troubleshoot, and secure a Linux server running on **AWS EC2**.
 
-The lab focuses on practical Linux administration and cloud support tasks that are commonly performed by Cloud Support Engineers, Cloud Operations Engineers, and Junior Cloud Security Engineers.
+The lab focuses on practical Linux administration and cloud support tasks that Cloud Support Engineers, Cloud Operations Engineers, and Junior Cloud Security Engineers commonly perform.
 
 The project was completed using an Ubuntu Linux EC2 instance in AWS.
 
