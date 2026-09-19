@@ -2,277 +2,531 @@
 
 ## Project Overview
 
-This final project simulates a real-world **Cloud Support / Linux Administration** task on an AWS EC2 Linux server.
+This project demonstrates deploying, configuring, administering, monitoring, troubleshooting, and securing a Linux server running on **AWS EC2**.
 
-### Scenario
+The lab focuses on practical Linux administration and cloud support tasks that are commonly performed by Cloud Support Engineers, Cloud Operations Engineers, and Junior Cloud Security Engineers.
 
-A cloud server is running, but something needs checking and fixing.
-
-The tasks were:
-
-1. SSH into the EC2 instance
-2. Check system logs using `journalctl`
-3. Review authentication logs
-4. Identify and correct unsafe file permissions
-5. Verify file ownership
-6. Update the APT package repository
-7. Install a required package
-8. Verify that the installed service is running
-9. Check currently running system services
-10. Confirm successful completion
-11. Stop the EC2 instance after completing the lab
+The project was completed using an Ubuntu Linux EC2 instance in AWS.
 
 ---
 
 ## Objectives
 
-- Practice secure SSH access to an AWS EC2 Linux server
-- Understand Linux system logs
-- Use `journalctl` for troubleshooting
-- Review authentication activity
-- Understand Linux file permissions
-- Correct unsafe permissions using `chmod`
-- Correct file ownership using `chown`
-- Manage packages using APT
-- Install and verify Nginx
-- Check Linux services using `systemctl`
-- Perform basic cloud server troubleshooting
-- Practice documenting a real-world support workflow
+The main objectives of this project were to practice:
+
+- AWS EC2 instance administration
+- Linux server administration
+- SSH remote access
+- Linux file and directory permissions
+- User and group management
+- Ownership management
+- Linux service management
+- Systemd and journal logs
+- Package management
+- Nginx installation and administration
+- Server monitoring
+- Basic troubleshooting
+- Cloud security fundamentals
 
 ---
 
-## Environment
+## Technologies Used
 
-| Component | Details |
+| Technology | Purpose |
 |---|---|
-| Cloud Platform | AWS |
-| Service | Amazon EC2 |
-| Operating System | Ubuntu 24.04.3 LTS |
-| Architecture | x86_64 |
-| Instance Type | t3.micro |
-| Access Method | SSH |
-| Package Manager | APT |
-| Web Server Installed | Nginx |
-| Service Manager | systemd |
+| AWS EC2 | Cloud virtual server |
+| Ubuntu Linux | Server operating system |
+| SSH | Remote server access |
+| Nginx | Web server |
+| systemd | Service management |
+| journalctl | System log investigation |
+| APT | Package management |
+| Linux CLI | Server administration |
+| AWS Security Groups | Network access control |
 
 ---
 
-# Part 1 — SSH into the EC2 Instance
+## AWS Environment
 
-I accessed the EC2 instance securely from Windows PowerShell using an SSH private key.
-Part 2 — Check System Logs
+- Cloud Provider: **Amazon Web Services (AWS)**
+- Service: **Amazon EC2**
+- Operating System: **Ubuntu Linux**
+- Instance Type: **t3.micro**
+- Region: **Asia Pacific (Mumbai)**
+- Access Method: **SSH**
+- Web Server: **Nginx**
 
-The system logs were reviewed using:
+---
 
+# Project Tasks
+
+## 1. EC2 Instance Deployment
+
+An Ubuntu Linux EC2 instance was deployed using the AWS Management Console.
+
+The instance was configured with:
+
+- Ubuntu Linux
+- t3.micro instance type
+- SSH access
+- Network configuration
+- Security Group rules
+- Public connectivity
+
+---
+
+## 2. SSH Connection
+
+The EC2 instance was accessed remotely using SSH from Windows PowerShell.
+
+Example:
+
+```
+ssh -i "linux-key.pem" ubuntu@<PUBLIC-IP>
+```
+
+After connecting successfully, the Ubuntu server displayed the system information and provided access to the Linux shell.
+
+---
+
+## 3. Linux System Information
+
+Basic Linux system information was inspected after connecting to the server.
+
+Commands used included:
+
+```
+whoami
+pwd
+ls -l
+```
+
+These commands were used to identify the current user, working directory, and files/directories.
+
+---
+
+# 4. Linux File and Directory Permissions
+
+A test application directory was created to practice Linux permissions.
+
+```
+mkdir test_app
+chmod 777 test_app
+ls -ld test_app
+```
+
+The permissions were then changed to a more restrictive configuration:
+
+```
+chmod 755 test_app
+```
+
+The resulting permissions were verified using:
+
+```
+ls -ld test_app
+```
+
+This demonstrated how Linux permissions control access to files and directories.
+
+---
+
+# 5. File Ownership
+
+The ownership of the directory was explicitly configured using:
+
+```
+sudo chown ubuntu:ubuntu test_app
+```
+
+Ownership was then verified with:
+
+```
+ls -ld test_app
+```
+
+This demonstrated practical Linux ownership management.
+
+---
+
+# 6. System Logs
+
+Linux system logs were investigated using `journalctl`.
+
+Command:
+
+```
 sudo journalctl -xe
+```
 
-This command displays recent systemd journal messages and provides information useful for troubleshooting services, startup events, sessions, and system activity.
+The command was used to inspect systemd events and service activity.
 
-The logs showed successful system startup and service activity.
+The logs showed events such as:
 
-Examples of information observed included:
+- System startup
+- User sessions
+- Service activity
+- SSH activity
+- sudo commands
+- System shutdown events
 
-system startup
-user session creation
-systemd services
-SSH activity
-authentication activity
-APT-related activity
-Part 3 — Review Authentication Logs
+---
 
-The authentication log was inspected using:
+# 7. Authentication Log Analysis
 
+The authentication log was examined using:
+
+```
 sudo cat /var/log/auth.log
+```
 
-The log contained authentication and security-related events.
+Specific SSH activity was also investigated using:
 
-Examples included:
-
-User creation
-User group membership
-SSH server activity
-Successful public-key authentication
-User sessions
-sudo activity
-Cron activity
-
-Additional filtering commands were also used:
-
+```
 sudo grep Accepted /var/log/auth.log
+```
 
 and:
 
+```
 sudo grep Failed /var/log/auth.log
+```
 
-These commands help administrators quickly investigate successful and failed authentication attempts.
+This provided practical experience with investigating authentication and SSH-related events.
 
-Part 4 — Check and Fix File Permissions
+---
 
-A test application directory was created:
+# 8. SSH Monitoring
 
-mkdir test_app
+The system logs were used to identify SSH activity.
 
-The permissions were intentionally changed to an unsafe configuration:
+The logs showed events including:
 
-chmod 777 test_app
+```
+Server listening on 0.0.0.0 port 22
+Server listening on :: port 22
+Accepted publickey for ubuntu
+```
 
-The permissions were then checked:
+This helped demonstrate how Linux administrators can investigate remote access activity.
 
-ls -ld test_app
+---
 
-The output showed:
+# 9. Package Management
 
-drwxrwxrwx
+The Ubuntu package repository information was updated using:
 
-This means the owner, group, and other users had read, write, and execute permissions.
-
-For a typical application directory, allowing write access to everyone can create unnecessary security risk.
-
-Part 5 — Correct the Permissions
-
-The directory permissions were changed to:
-
-chmod 755 test_app
-
-The permissions were verified:
-
-ls -ld test_app
-
-The resulting permissions were:
-
-drwxr-xr-x
-
-This provides:
-
-Owner: read, write, execute
-Group: read, execute
-Others: read, execute
-
-The permissions were therefore more restrictive than the original 777 configuration.
-
-Part 6 — Verify File Ownership
-
-The ownership of the directory was also checked and corrected using:
-
-sudo chown ubuntu:ubuntu test_app
-
-Then:
-
-ls -ld test_app
-
-The final ownership showed:
-
-ubuntu ubuntu
-
-This confirms that the directory belongs to the intended ubuntu user and group.
-
-Part 7 — Update the Package Repository
-
-Before installing the required package, the APT package information was updated:
-
+```
 sudo apt update
+```
 
-The command successfully contacted the Ubuntu package repositories and downloaded updated package metadata.
+The system reported available package updates.
 
-The system reported that packages could be upgraded.
+This is a standard Linux administration task used before installing or updating software.
 
-Part 8 — Install Nginx
+---
+
+# 10. Nginx Installation
 
 Nginx was installed using:
 
+```
 sudo apt install nginx -y
+```
 
-The installation completed successfully.
+After installation, the Nginx service was checked using:
 
-The installed Nginx package was:
-
-nginx 1.24.0-2ubuntu7.5
-
-The installation also created and configured the Nginx systemd service.
-
-Part 9 — Verify Nginx Service
-
-The Nginx service was checked using:
-
+```
 sudo systemctl status nginx
+```
 
-The output confirmed:
+The service was running successfully.
 
+Example status:
+
+```
 Active: active (running)
+```
 
-This verifies that Nginx was successfully installed and running.
+---
 
-Part 10 — Check Running Services
+# 11. Nginx Service Management
 
-The currently running system services were reviewed using:
+The Nginx service was managed using systemd.
 
+Useful commands include:
+
+```
+sudo systemctl start nginx
+sudo systemctl stop nginx
+sudo systemctl restart nginx
+sudo systemctl status nginx
+```
+
+The service was verified as active and running.
+
+---
+
+# 12. Running Services
+
+Running system services were inspected using:
+
+```
 systemctl list-units --type=service --state=running
+```
 
-The output showed multiple active services, including:
+This displays currently running services such as:
 
-nginx.service
-ssh.service
-systemd-journald.service
-systemd-networkd.service
-systemd-resolved.service
-rsyslog.service
-cron.service
-snap.amazon-ssm-agent.amazon-ssm-agent.service
+- nginx.service
+- ssh.service
+- systemd-journald.service
+- systemd-networkd.service
+- cron.service
+- rsyslog.service
 
-This helped verify the operational state of the server.
+This helped build familiarity with Linux service administration.
 
-Part 11 — Verify Project Completion
+---
 
-A completion message was created:
+# 13. Final Verification
 
-echo "Day 29 Final Project completed successfully" > day29_success.txt
+The final project environment was verified through:
 
-The file was verified using:
+- EC2 instance configuration
+- SSH connectivity
+- Linux administration commands
+- File permissions
+- File ownership
+- System logs
+- Authentication logs
+- Nginx installation
+- Nginx service status
+- Running services
 
-cat day29_success.txt
+The project was completed.
 
-Output:
+---
 
-Day 29 Final Project completed successfully
+# Security Concepts Practised
 
-This confirmed that all planned tasks were completed.
+This project provided practical exposure to several cloud security concepts.
 
-Part 12 — Stop the EC2 Instance
+### Authentication
 
-After completing the lab, the EC2 instance was stopped from the AWS EC2 console.
+SSH public-key authentication was used to securely access the EC2 server.
 
-The final AWS console screenshot shows:
+### Access Control
 
-Instance state: Stopped
+Linux permissions and ownership were configured to control access to resources.
 
-Stopping the instance after completing the lab helps avoid unnecessary compute usage.
+### Network Security
 
-Troubleshooting Skills Practiced
+AWS Security Groups were used to control network access to the EC2 instance.
 
-This project provided practical experience with:
+### Logging and Monitoring
 
-SSH
-ssh -i "linux-key.pem" ubuntu@<EC2-PUBLIC-IP>
-System Logs
+Linux authentication logs and systemd journals were examined to investigate system activity.
+
+### Service Security
+
+Running services were inspected to understand which services were active on the server.
+
+---
+
+# Troubleshooting Skills Practised
+
+The project also developed practical troubleshooting skills.
+
+### SSH Troubleshooting
+
+Investigating:
+
+- SSH connectivity
+- Port 22
+- Authentication
+- SSH service status
+
+### Service Troubleshooting
+
+Checking:
+
+```
+sudo systemctl status nginx
+```
+
+### Log Troubleshooting
+
+Investigating:
+
+```
 sudo journalctl -xe
-Authentication Logs
+```
+
+and:
+
+```
 sudo cat /var/log/auth.log
-Log Filtering
-sudo grep Accepted /var/log/auth.log
-sudo grep Failed /var/log/auth.log
-File Permissions
+```
+
+### Permission Troubleshooting
+
+Checking:
+
+```
 ls -ld test_app
-chmod 777 test_app
+```
+
+and modifying permissions using:
+
+```
+chmod
+```
+
+### Ownership Troubleshooting
+
+Checking and modifying ownership using:
+
+```
+chown
+```
+
+---
+
+# Important Commands
+
+## Linux
+
+```
+whoami
+pwd
+ls -l
+ls -ld
+```
+
+## Permissions
+
+```
 chmod 755 test_app
-File Ownership
+chmod 777 test_app
+```
+
+## Ownership
+
+```
 sudo chown ubuntu:ubuntu test_app
-Package Management
+```
+
+## Package Management
+
+```
 sudo apt update
 sudo apt install nginx -y
-Service Management
-sudo systemctl status nginx
-Running Services
-systemctl list-units --type=service --state=running
+```
 
-```bash
-ssh -i "linux-key.pem" ubuntu@<EC2-PUBLIC-IP>
+## Services
+
+```
+sudo systemctl status nginx
+sudo systemctl start nginx
+sudo systemctl stop nginx
+sudo systemctl restart nginx
+```
+
+## Logs
+
+```
+sudo journalctl -xe
+sudo cat /var/log/auth.log
+sudo grep Accepted /var/log/auth.log
+sudo grep Failed /var/log/auth.log
+```
+
+## Running Services
+
+```
+systemctl list-units --type=service --state=running
+```
+
+---
+
+# Skills Demonstrated
+
+- AWS EC2
+- Ubuntu Linux
+- Linux Administration
+- SSH
+- Linux Permissions
+- File Ownership
+- User Management
+- Systemd
+- Journalctl
+- Authentication Logs
+- Nginx
+- Package Management
+- Service Management
+- Troubleshooting
+- Cloud Security Fundamentals
+- Security Monitoring
+
+---
+
+# Project Evidence
+
+Screenshots included in this project document the following activities:
+
+1. AWS EC2 instance configuration
+2. EC2 instance status
+3. SSH connection to Ubuntu
+4. Linux system information
+5. Linux permissions
+6. File ownership
+7. System logs
+8. Authentication logs
+9. APT package management
+10. Nginx installation
+11. Nginx service status
+12. Running Linux services
+13. Final project completion
+
+---
+
+# What I Learned
+
+Through this project, I gained practical experience administering a Linux server running in AWS EC2.
+
+I learned how to:
+
+- Connect to a cloud Linux server using SSH
+- Manage Linux files and permissions
+- Manage file ownership
+- Install and manage software packages
+- Start, stop, and monitor Linux services
+- Install and verify Nginx
+- Investigate system and authentication logs
+- Monitor SSH activity
+- Perform basic cloud server troubleshooting
+- Apply basic security and access-control concepts
+
+---
+
+# Future Improvements
+
+Possible future improvements include:
+
+- Configure CloudWatch monitoring
+- Create CloudWatch alarms
+- Configure automated log monitoring
+- Add Nginx access-log analysis
+- Add security monitoring scripts
+- Implement automated backup
+- Add infrastructure-as-code using Terraform
+- Add CI/CD automation
+- Integrate the server with a security monitoring solution
+
+---
+
+# Author
+
+**Sri Gayathri**
+
+Aspiring Cloud Security Engineer
